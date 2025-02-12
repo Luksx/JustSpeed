@@ -2,17 +2,19 @@
 #include "resource_dir.h"	// utility header for SearchAndSetResourceDir
 
 
-#define WINDOWHEIGHT 1280
-#define WINDOWWIDTH 800
+#define WINDOWHEIGHT 800
+#define WINDOWWIDTH 510
 
 Vector2 check_movement(){
 	Vector2 velocity = {0,0};
+	/*
 	if(IsKeyDown(KEY_S)){
 		velocity.y += 1;
 	}
 	if(IsKeyDown(KEY_W)){
 		velocity.y -= 1;
 	}
+	*/
 	if(IsKeyDown(KEY_D)){
 		velocity.x += 1;
 	}
@@ -23,10 +25,19 @@ Vector2 check_movement(){
 }
 
 int move_controller(Vector2 *position, float speed){
+	
+	Vector2 playersize = {64, 32};
+
+
 	Vector2 velocity = check_movement();
 	Vector2 init_pos = {position->x + speed * velocity.x, position->y + speed * velocity.y};
-	DrawRectangle(init_pos.x, init_pos.y, 64, 32, WHITE);
+	//Check borders
+	if(init_pos.x > (WINDOWWIDTH-10 -playersize.x) || init_pos.x < (10))
+	init_pos = *position;
+
+	DrawRectangle(init_pos.x, init_pos.y, playersize.x, playersize.y, WHITE);
 	*position = init_pos;
+	return 0;
 }
 
 
@@ -39,7 +50,7 @@ int main ()
 	SearchAndSetResourceDir("resources");
 
 
-	Vector2 playerpos = {WINDOWWIDTH/2, WINDOWHEIGHT/2};
+	Vector2 playerpos = {WINDOWWIDTH/2, WINDOWHEIGHT - 50};
 	float speed = 10;
 
 
@@ -49,7 +60,6 @@ int main ()
 		
 		BeginDrawing();
 		ClearBackground(BLACK);
-
 		move_controller(&playerpos, speed);
 		EndDrawing();
 	}
