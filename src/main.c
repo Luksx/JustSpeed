@@ -1,54 +1,59 @@
-/*
-Raylib example file.
-This is an example main file for a simple raylib project.
-Use this as a starting point or replace it with your code.
-
-by Jeffery Myers is marked with CC0 1.0. To view a copy of this license, visit https://creativecommons.org/publicdomain/zero/1.0/
-
-*/
-
 #include "raylib.h"
-
 #include "resource_dir.h"	// utility header for SearchAndSetResourceDir
+
+
+#define WINDOWHEIGHT 1280
+#define WINDOWWIDTH 800
+
+Vector2 check_movement(){
+	Vector2 velocity = {0,0};
+	if(IsKeyDown(KEY_S)){
+		velocity.y += 1;
+	}
+	if(IsKeyDown(KEY_W)){
+		velocity.y -= 1;
+	}
+	if(IsKeyDown(KEY_D)){
+		velocity.x += 1;
+	}
+	if(IsKeyDown(KEY_A)){
+		velocity.x -= 1;
+	}
+	return velocity;
+}
+
+int move_controller(Vector2 *position, float speed){
+	Vector2 velocity = check_movement();
+	Vector2 init_pos = {position->x + speed * velocity.x, position->y + speed * velocity.y};
+	DrawRectangle(init_pos.x, init_pos.y, 64, 32, WHITE);
+	*position = init_pos;
+}
+
+
 
 int main ()
 {
-	// Tell the window to use vsync and work on high DPI displays
+	//SETUP
 	SetConfigFlags(FLAG_VSYNC_HINT | FLAG_WINDOW_HIGHDPI);
-
-	// Create the window and OpenGL context
-	InitWindow(1280, 800, "Hello Raylib");
-
-	// Utility function from resource_dir.h to find the resources folder and set it as the current working directory so we can load from it
+	InitWindow(WINDOWWIDTH, WINDOWHEIGHT, "AtariBreakout");
 	SearchAndSetResourceDir("resources");
 
-	// Load a texture from the resources directory
-	Texture wabbit = LoadTexture("wabbit_alpha.png");
-	
-	// game loop
-	while (!WindowShouldClose())		// run the loop untill the user presses ESCAPE or presses the Close button on the window
-	{
-		// drawing
-		BeginDrawing();
 
-		// Setup the back buffer for drawing (clear color and depth buffers)
+	Vector2 playerpos = {WINDOWWIDTH/2, WINDOWHEIGHT/2};
+	float speed = 10;
+
+
+	//LOOP
+	while (!WindowShouldClose())
+	{
+		
+		BeginDrawing();
 		ClearBackground(BLACK);
 
-		// draw some text using the default font
-		DrawText("Hello Raylib", 200,200,20,WHITE);
-
-		// draw our texture to the screen
-		DrawTexture(wabbit, 400, 200, WHITE);
-		
-		// end the frame and get ready for the next one  (display frame, poll input, etc...)
+		move_controller(&playerpos, speed);
 		EndDrawing();
 	}
 
-	// cleanup
-	// unload our texture so it can be cleaned up
-	UnloadTexture(wabbit);
-
-	// destroy the window and cleanup the OpenGL context
 	CloseWindow();
 	return 0;
 }
