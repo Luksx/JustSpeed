@@ -2,41 +2,29 @@
 #include "resource_dir.h"
 #include "player.h"
 #include "global.h"
+#include "ball.h"
+#include <string>
 #include <iostream>
 
-Vector2 handle_hit(Vector2 playerpos, Vector2 ballpos)
-{
-	if(playerpos.y - ballpos.y < 1 && playerpos.x - ballpos.x < 20)
-		return {0, -1};
-	else if(abs(playerpos.y - ballpos.y) > 1000)
-		return {0, 1};
-	return {0, 0};
-}
-
-
-int handle_ball(Vector2 *position, Vector2 playerpos, float speed)
-{
-	float ballradius = 10;
-	Vector2 velocity = handle_hit(*position, playerpos);
-	Vector2 init_pos = {position->x + speed * velocity.x, position->y + speed * velocity.y};
-
-	DrawCircle(init_pos.x, init_pos.y, ballradius, WHITE);
-	*position = init_pos;
-	return 0;
-}
 
 
 int main ()
 {
 	//SETUP
 	SetConfigFlags(FLAG_VSYNC_HINT | FLAG_WINDOW_HIGHDPI);
-	InitWindow(WINDOWWIDTH, WINDOWHEIGHT, "AtariBreakout");
+	InitWindow(WINDOWWIDTH, WINDOWHEIGHT, "JustSpeed");
 	SearchAndSetResourceDir("resources");
 
+	Vector2 playersize = {64, 32};
+	Vector2 playerpos = {WINDOWWIDTH/2-32, WINDOWHEIGHT - 50};
+	Vector2 player2pos = {WINDOWWIDTH/2-32, 50};
 
-	Vector2 playerpos = {WINDOWWIDTH/2, WINDOWHEIGHT - 50};
-	float speed = 10;
+
 	Vector2 circlepos = {WINDOWWIDTH/2, WINDOWHEIGHT/2};
+	Vector2 ball_velocity = {0, 1};
+	float game_speed = 10;
+
+	int ballhits = 1;
 
 
 	//LOOP
@@ -45,8 +33,10 @@ int main ()
 		
 		BeginDrawing();
 		ClearBackground(BLACK);
-		handle_ball(&circlepos, playerpos, speed/2);
-		move_controller(&playerpos, speed);
+		handle_ball(&circlepos, playerpos, player2pos, game_speed+((ballhits)*GAMESPEEDMOD), &ball_velocity, &ballhits);
+		move_controller(&playerpos, 0, game_speed+(ballhits/3), playersize);
+		move_controller(&player2pos, 1, game_speed+(ballhits/3), playersize);
+		DrawText(("Ballhits: " + std::to_string(ballhits)).c_str(), 20, 20, 15, WHITE);
 		EndDrawing();
 	}
 

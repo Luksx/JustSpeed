@@ -1,2 +1,4 @@
 #define WINDOWHEIGHT 800
 #define WINDOWWIDTH 510
+#define BALLSIZE 10
+#define GAMESPEEDMOD 0.5
