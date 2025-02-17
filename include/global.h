@@ -1,0 +1,2 @@
+#define WINDOWHEIGHT 800
+#define WINDOWWIDTH 510
