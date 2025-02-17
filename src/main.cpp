@@ -33,7 +33,7 @@ int main ()
 		
 		BeginDrawing();
 		ClearBackground(BLACK);
-		handle_ball(&circlepos, playerpos, player2pos, game_speed+((ballhits)*GAMESPEEDMOD), &ball_velocity, &ballhits);
+		handle_ball(&circlepos, playerpos, player2pos, game_speed*((ballhits+1)*GAMESPEEDMOD), &ball_velocity, &ballhits);
 		move_controller(&playerpos, 0, game_speed+(ballhits/3), playersize);
 		move_controller(&player2pos, 1, game_speed+(ballhits/3), playersize);
 		DrawText(("Ballhits: " + std::to_string(ballhits)).c_str(), 20, 20, 15, WHITE);

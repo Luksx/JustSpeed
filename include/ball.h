@@ -39,7 +39,7 @@ int handle_ball(Vector2 *position, Vector2 playerpos, Vector2 player2pos, float 
 {
 
 	Vector2 velocity;
-	float random_x = (drand48() - 1.5)/4;
+	float random_x = (drand48() - 1.5)/2;
 	if(handle_hit(playerpos, *position, ballhits))
 	velocity = {(prevelocity->x) + random_x, -(prevelocity->y)};
 	else if (handle_hit(player2pos, *position, ballhits))
