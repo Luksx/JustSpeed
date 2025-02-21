@@ -27,15 +27,15 @@ Vector2 check_movement(int playerid){
 	return velocity;
 }
 
-int move_controller(Vector2 *position, int playerid, float game_speed,Vector2 playersize)
+int MoveController(Rectangle *playerrec, int playerid, float game_speed)
 {
 	Vector2 velocity = check_movement(playerid);
-	Vector2 init_pos = {position->x + game_speed * velocity.x, position->y + game_speed * velocity.y};
-	//Check borders
-	if(init_pos.x > (WINDOWWIDTH-10 -playersize.x) || init_pos.x < (10))
-	init_pos = *position;
+	int init_x = playerrec->x + game_speed * velocity.x;
+	if(init_x > (WINDOWWIDTH - 10 - PLAYERY) || init_x < (10 + PLAYERY));
+	else
+	playerrec->x = init_x;
+	playerrec->y =  playerrec->y + game_speed * velocity.y;
 
-	DrawRectangle(init_pos.x, init_pos.y, playersize.x, playersize.y, WHITE);
-	*position = init_pos;
+	DrawRectangleRec(*playerrec, WHITE);
 	return 0;
 }
